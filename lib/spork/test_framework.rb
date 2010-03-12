@@ -1,5 +1,5 @@
 class Spork::TestFramework
-  LOAD_PREFERENCE = ['RSpec', 'Cucumber']
+  LOAD_PREFERENCE = ['RSpec', 'RSpec2', 'Cucumber']
   BOOTSTRAP_FILE = File.dirname(__FILE__) + "/../../assets/bootstrap.rb"
 
   @@supported_test_frameworks = []

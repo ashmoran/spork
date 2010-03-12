@@ -41,22 +41,26 @@ describe Spork::TestFramework do
       Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec]
     end
 
-    it "returns rspec before cucumber when both are available" do
+    it "returns rspec before rspec2 before cucumber when all are available" do
       Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
+      Spork::TestFramework::RSpec2.stub!(:available?).and_return(true)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
-      Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec, Spork::TestFramework::Cucumber]
+      Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec, Spork::TestFramework::RSpec2, Spork::TestFramework::Cucumber]
     end
   end
 
   describe ".supported_test_frameworks" do
     it "returns all defined servers" do
       Spork::TestFramework.supported_test_frameworks.should include(Spork::TestFramework::RSpec)
+      Spork::TestFramework.supported_test_frameworks.should include(Spork::TestFramework::RSpec2)
       Spork::TestFramework.supported_test_frameworks.should include(Spork::TestFramework::Cucumber)
     end
 
     it "returns a list of servers matching a case-insensitive prefix" do
-      Spork::TestFramework.supported_test_frameworks("rspec").should == [Spork::TestFramework::RSpec]
-      Spork::TestFramework.supported_test_frameworks("rs").should == [Spork::TestFramework::RSpec]
+      # TODO verify that having both versions returned is correct, or at least acceptable
+      Spork::TestFramework.supported_test_frameworks("rspec").should == [Spork::TestFramework::RSpec, Spork::TestFramework::RSpec2]
+      Spork::TestFramework.supported_test_frameworks("rs").should == [Spork::TestFramework::RSpec, Spork::TestFramework::RSpec2]
+      Spork::TestFramework.supported_test_frameworks("rspec2").should == [Spork::TestFramework::RSpec2]
       Spork::TestFramework.supported_test_frameworks("cuc").should == [Spork::TestFramework::Cucumber]
     end
   end
@@ -99,14 +103,21 @@ describe Spork::TestFramework do
   end
 
   describe ".factory" do
+    # Currently, both frameworks are detected by spec_helper.rb,
+    # therefore they will both appear available or unavailable together
+    def stub_rspec_available(availability)
+      Spork::TestFramework::RSpec.stub!(:available?).and_return(availability)
+      Spork::TestFramework::RSpec2.stub!(:available?).and_return(availability)
+    end
+    
     it "defaults to use rspec over cucumber" do
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
+      stub_rspec_available(true)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
       Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::RSpec
     end
 
     it "defaults to use cucumber when rspec not available" do
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(false)
+      stub_rspec_available(false)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
       Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::Cucumber
     end
