@@ -3,6 +3,12 @@ class Spork::TestFramework::RSpec < Spork::TestFramework
   HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
 
   def run_tests(argv, stderr, stdout)
-    raise "Unimplemented"
+    ::Spec::Runner::CommandLine.run(
+      ::Spec::Runner::OptionParser.parse(
+        argv,
+        stderr,
+        stdout
+      )
+    )
   end
 end
