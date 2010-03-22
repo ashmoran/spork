@@ -4,7 +4,7 @@ Feature: Cucumber integration with rails
   In order to eliminate the startup cost of my application each time I run them
   
   Background: Sporked env.rb
-    Given I am in a fresh rails project named "test_rails_project"
+    Given I am in a fresh rails 2 project named "test_rails_project"
     And the application has a model, observer, route, and application helper
     And a file named "features/support/env.rb" with:
       """

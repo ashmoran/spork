@@ -1,7 +1,13 @@
 # TODO something about Rails 3
 Given /^I am in a fresh rails (2|3)? project named "(.+)"$/ do |rails_version, folder_name|
   @current_dir = SporkWorld::SANDBOX_DIR
-  version_argument = ENV['RAILS_VERSION'] ? "_#{ENV['RAILS_VERSION']}_" : nil
+  
+  rails_version_full = rails_version == "2" ? "2.3.5" : "3.0.0.beta"
+  # TODO deprecate ENV['RAILS_VERSION']
+  @rails_version_to_use = ENV['RAILS_VERSION'] || rails_version_full
+  
+  version_argument = "_#{@rails_version_to_use}_"
+
   # run("#{SporkWorld::RUBY_BINARY} #{%x{which rails}.chomp} #{folder_name}")
   run([SporkWorld::RUBY_BINARY, '-I', Cucumber::LIBDIR, %x{which rails}.chomp, version_argument, folder_name].compact * " ")
   @current_dir = File.join(File.join(SporkWorld::SANDBOX_DIR, folder_name))
@@ -9,13 +15,14 @@ end
 
 Given "the application has a model, observer, route, and application helper" do
   # TODO append to the generated file rather than overwrite
+  # It seems safe to generate this in a Rails 2 app as it'll be ignored
   Given 'a file named "Gemfile" with:',
     """
     # Edit this Gemfile to bundle your application's dependencies.
     source 'http://gemcutter.org'
 
 
-    gem 'rails', '3.0.0.beta'
+    gem 'rails', '#{@rails_version_to_use}'
 
     ## Bundle edge rails:
     # gem 'rails', :git => 'git://github.com/rails/rails.git'
