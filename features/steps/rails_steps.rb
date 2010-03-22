@@ -1,4 +1,5 @@
-Given /^I am in a fresh rails project named "(.+)"$/ do |folder_name|
+# TODO something about Rails 3
+Given /^I am in a fresh rails (2|3)? project named "(.+)"$/ do |rails_version, folder_name|
   @current_dir = SporkWorld::SANDBOX_DIR
   version_argument = ENV['RAILS_VERSION'] ? "_#{ENV['RAILS_VERSION']}_" : nil
   # run("#{SporkWorld::RUBY_BINARY} #{%x{which rails}.chomp} #{folder_name}")
@@ -6,8 +7,39 @@ Given /^I am in a fresh rails project named "(.+)"$/ do |folder_name|
   @current_dir = File.join(File.join(SporkWorld::SANDBOX_DIR, folder_name))
 end
 
-
 Given "the application has a model, observer, route, and application helper" do
+  # TODO append to the generated file rather than overwrite
+  Given 'a file named "Gemfile" with:',
+    """
+    # Edit this Gemfile to bundle your application's dependencies.
+    source 'http://gemcutter.org'
+
+
+    gem 'rails', '3.0.0.beta'
+
+    ## Bundle edge rails:
+    # gem 'rails', :git => 'git://github.com/rails/rails.git'
+
+    # ActiveRecord requires a database adapter. By default,
+    # Rails has selected sqlite3.
+    gem 'sqlite3-ruby', :require => 'sqlite3'
+
+    ## Bundle the gems you use:
+    # gem 'bj'
+    # gem 'hpricot', '0.6'
+    # gem 'sqlite3-ruby', :require => 'sqlite3'
+    # gem 'aws-s3', :require => 'aws/s3'
+
+    ## Bundle gems used only in certain environments:
+    # gem 'rspec', :group => :test
+    # group :test do
+    #   gem 'webrat'
+    # end
+    
+    # Spork feature additions
+    gem 'spork'
+    gem 'rspec-rails'
+    """
   Given 'a file named "app/models/user.rb" with:',
     """
     class User < ActiveRecord::Base

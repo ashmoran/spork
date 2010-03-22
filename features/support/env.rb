@@ -2,7 +2,15 @@ require 'rubygems'
 require 'fileutils'
 require 'forwardable'
 require 'tempfile'
-require 'spec/expectations'
+
+begin
+  require 'rspec/expectations'
+rescue LoadError => e
+  puts "*** Falling back to RSpec 1.3 expectations in Cucumber"
+  require 'spec/expectations'  
+end
+
+
 require 'timeout'
 require 'spork'
 

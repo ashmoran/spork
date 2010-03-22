@@ -88,6 +88,7 @@ end
 
 Then /^the (error output|output) should contain$/ do |which, text|
   (which == "error output" ? last_stderr : last_stdout).should include(text)
+  puts "MOOOOOOOOOOOOOOOOO"
 end
 
 Then /^the (error output|output) should contain "(.+)"$/ do |which, text|
