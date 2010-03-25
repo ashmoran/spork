@@ -10,7 +10,7 @@ Feature: Unknown app frameworks
       require 'spec'
       """
     When I run spork
-    Then the error output should contain "Using RSpec"
+    Then the stderr should contain "Using RSpec"
     Then the error output should match /You must bootstrap .+spec\/spec_helper\.rb to continue/
   
   Scenario: Sporked spec_helper
@@ -37,6 +37,6 @@ Feature: Unknown app frameworks
       end
       """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb 
-    Then the output should contain "Specs successfully run within spork"
+    And I run ""
+    Then I should see "Specs successfully run within spork"
   

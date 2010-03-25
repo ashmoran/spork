@@ -4,7 +4,7 @@ Feature: Diagnostic Mode
   That provides a list of which project files were loaded during prefork, and who loaded them.
 
   Scenario: Running spork --diagnose
-    Given I am in the directory "test_project"
+    # Given I am in the directory "test_project"
     And a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
@@ -29,13 +29,10 @@ Feature: Diagnostic Mode
       class Awesome
       end
       """
-    When I run spork --diagnose
-    Then the error output should contain
-      """
-      Loading Spork.prefork block...
-      """
-    And the output should contain "lib/awesome.rb"
-    And the output should contain "spec/spec_helper.rb:5"
-    And the output should not contain "super_duper.rb"
-    And the output should not contain "diagnose.rb"
+    When I run "spork --diagnose"
+    Then the stderr should contain "Loading Spork.prefork block..."
+    And I should see "lib/awesome.rb"
+    And I should see "spec/spec_helper.rb:5"
+    And I should not see "super_duper.rb"
+    And I should not see "diagnose.rb"
      

@@ -45,10 +45,10 @@ Feature: Spork Debugger integration
     When I type this in the spork window: "continue"
 
     Then the spork window should output a line containing "Debug Session Terminated"
-    And the output should contain "it worked!"
+    And the background job output should contain "it worked!"
 
   Scenario: When ruby-debug is already required and started.
-      Given a file named "spec/spec_helper.rb" with:
+    Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
       require 'spork'
@@ -85,7 +85,7 @@ Feature: Spork Debugger integration
     When I type this in the spork window: "continue"
 
     Then the spork window should output a line containing "Debug Session Terminated"
-    And the output should contain "it worked!"
+    And the background job output should contain "it worked!"
 
   Scenario: When ruby-debug is invoked during preload
       Given a file named "spec/spec_helper.rb" with:

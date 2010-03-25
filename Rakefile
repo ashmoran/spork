@@ -16,6 +16,38 @@ rescue LoadError
   end
 end
 
+namespace :cucumber do
+  desc "Prepare RVM environments for Cucumber features"
+  task :prepare do
+    puts "******************************************"
+    puts "Run the following commands in your shell,"
+    puts "pending a better way to do this :-)"
+    puts "(`rvm 1.9.1 exec bundle install` would be sweet)"
+    puts "******************************************"
+    puts
+    
+    puts "rvm use 1.8.7; rvm --force gemset delete spork-rails2; rvm gemset create spork-rails2"
+    puts "rvm use 1.8.7; rvm --force gemset delete spork-rails3; rvm gemset create spork-rails3"
+    puts "rvm use 1.9.1; rvm --force gemset delete spork-rails2; rvm gemset create spork-rails2"
+    puts "rvm use 1.9.1; rvm --force gemset delete spork-rails3; rvm gemset create spork-rails3"
+    puts
+    
+    puts "rvm use 1.8.7@spork-rails2; gem install bundler; bundle install --gemfile=features/gemfiles/rails2.gemfile"
+    puts "rvm use 1.8.7@spork-rails3; gem install bundler; bundle install --gemfile=features/gemfiles/rails3.gemfile"
+    puts "rvm use 1.9.1@spork-rails2; gem install bundler; bundle install --gemfile=features/gemfiles/rails2.gemfile"
+    puts "rvm use 1.9.1@spork-rails3; gem install bundler; bundle install --gemfile=features/gemfiles/rails3.gemfile"
+    puts
+    
+    # Temporary integration hack
+    puts "Then install ashleymoran/rspec-core into 1.8.7@spork-rails3 and 1.9.1@spork-rails3 (may have to uninstall first)"
+    puts "rake build && rvm 1.8.7@spork-rails3 gem install pkg/rspec-core-2.0.0.beta.4.gem"
+    puts "rake build && rvm 1.9.1@spork-rails3 gem install pkg/rspec-core-2.0.0.beta.4.gem"
+    puts
+    
+    puts "rvm use default # or whatever you're using to develop Spork"
+  end
+end
+
 task :default => :spec
 
 require 'rake/rdoctask'

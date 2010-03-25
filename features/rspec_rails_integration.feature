@@ -35,12 +35,12 @@ Feature: Rails Integration
     And the application has a model, observer, route, and application helper
   Scenario: Analyzing files were preloaded
     When I run spork --diagnose
-    Then the output should not contain "user_observer.rb"
-    Then the output should not contain "user.rb"
-    Then the output should not contain "app/controllers/application.rb"
-    Then the output should not contain "app/controllers/application_controller.rb"
-    Then the output should not contain "app/controllers/application_helper.rb"
-    Then the output should not contain "config/routes.rb"
+    Then I should not see "user_observer.rb"
+    Then I should not see "user.rb"
+    Then I should not see "app/controllers/application.rb"
+    Then I should not see "app/controllers/application_controller.rb"
+    Then I should not see "app/controllers/application_helper.rb"
+    Then I should not see "config/routes.rb"
   
   Scenario: Running spork with a rails app and observers
     Given a file named "spec/did_it_work_spec.rb" with:
@@ -63,7 +63,7 @@ Feature: Rails Integration
     When I fire up a spork instance with "spork rspec"
     And I run spec --drb spec/did_it_work_spec.rb 
     Then the error output should be empty
-    And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
+    And I should see "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"
 
 
@@ -88,5 +88,5 @@ Feature: Rails Integration
     When I fire up a spork instance with "spork rspec --port 7000"
     And I run spec --drb --port 7000 spec/did_it_work_spec.rb
     Then the error output should be empty
-    And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
+    And I should see "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"

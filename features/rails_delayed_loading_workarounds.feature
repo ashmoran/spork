@@ -104,12 +104,12 @@ Feature: Rails Delayed Work arounds
       <p>Here is a list of users</p>
       """
       
-    And I run spec --drb spec/controllers/users_controller_spec.rb
-    Then the output should contain "Controller stack is functioning when rendering from a controller"
-    Then the output should contain "Views are not being cached when rendering from a controller"
-    Then the output should contain "All helper modules were included when rendering from a controller"
+    And I run ""
+    Then I should see "Controller stack is functioning when rendering from a controller"
+    Then I should see "Views are not being cached when rendering from a controller"
+    Then I should see "All helper modules were included when rendering from a controller"
 
-    And I run spec --drb spec/views/index.html.erb_spec.rb
-    Then the output should contain "Controller stack is functioning when rendering directly"
-    Then the output should contain "Views are not being cached when rendering directly"
-    Then the output should contain "All helper modules were included when rendering directly"
+    And I run ""
+    Then I should see "Controller stack is functioning when rendering directly"
+    Then I should see "Views are not being cached when rendering directly"
+    Then I should see "All helper modules were included when rendering directly"

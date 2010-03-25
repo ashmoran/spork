@@ -1,0 +1,13 @@
+source :gemcutter
+
+gem "sqlite3-ruby"
+gem "cucumber"
+gem "rspec-core",           "= 2.0.0.beta.4"
+gem "rspec-expectations",   "= 2.0.0.beta.4"
+gem "rspec-rails",          "= 2.0.0.beta.4"
+gem "rails",                "= 3.0.0.beta"
+
+if RUBY_VERSION < "1.9"
+  gem "ruby-debug"  
+end
+

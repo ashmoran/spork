@@ -1,12 +1,15 @@
 Feature: At exit during each run
   In order to make sure at_exit hooks defined during the run get called
-  I want to override kernel #at_exit
+  I want to override Kernel#at_exit
 
   Scenario: at exit (RSpec 1)
-
+    Given I am using rvm "1.8.7"
+    And I am using rvm gemset "spork-rails2"
+    
     Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
+      gem 'rspec', '< 2.0.0'
       require 'spec'
       Spork.prefork do
         puts "loading"
@@ -30,16 +33,20 @@ Feature: At exit during each run
       end
       """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb
-    Then the output should contain "second first"
-    Then the output should not contain "prefork at_exit called"
+    And I run "spec --drb spec/did_it_work_spec.rb"
+    Then I should see "second first"
+    Then I should not see "prefork at_exit called"
 
-  Scenario: at exit (RSpec 2)
+  Scenario Outline: at exit (RSpec 2)
+    Given I am using rvm "<ruby_version>"
+    And I am using rvm gemset "spork-rails3"
 
     Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
+      require 'bundler'
       require 'rspec/core'
+      
       Spork.prefork do
         puts "loading"
         at_exit { puts "prefork at_exit called" }
@@ -62,7 +69,11 @@ Feature: At exit during each run
       end
       """
     When I fire up a spork instance with "spork rspec2"
-    And I run rspec --drb spec/did_it_work_spec.rb
-    Then the output should contain "second first"
-    Then the output should not contain "prefork at_exit called"
+    And I run "rspec --drb spec/did_it_work_spec.rb"
+    Then I should see "second first"
+    Then I should not see "prefork at_exit called"
     
+    Examples:
+      | ruby_version |
+      | 1.8.7        |
+      | 1.9.1        |

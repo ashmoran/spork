@@ -4,7 +4,7 @@ Feature: Cucumber integration with rails
   In order to eliminate the startup cost of my application each time I run them
   
   Background: Sporked env.rb
-    Given I am in a fresh rails 2 project named "test_rails_project"
+    Given I am in a fresh rails project named "test_rails_project"
     And the application has a model, observer, route, and application helper
     And a file named "features/support/env.rb" with:
       """
@@ -87,18 +87,18 @@ Feature: Cucumber integration with rails
       """
     Scenario: Analyzing files were preloaded
       When I run spork --diagnose
-      Then the output should not contain "user_observer.rb"
-      Then the output should not contain "user.rb"
-      Then the output should not contain "app/controllers/application.rb"
-      Then the output should not contain "app/controllers/application_controller.rb"
-      Then the output should not contain "app/controllers/application_helper.rb"
-      Then the output should not contain "config/routes.rb"
-      Then the output should not contain "features/step_definitions/cucumber_rails_steps.rb"
-      Then the output should not contain "features/support/cucumber_rails_helper.rb"
+      Then I should not see "user_observer.rb"
+      Then I should not see "user.rb"
+      Then I should not see "app/controllers/application.rb"
+      Then I should not see "app/controllers/application_controller.rb"
+      Then I should not see "app/controllers/application_helper.rb"
+      Then I should not see "config/routes.rb"
+      Then I should not see "features/step_definitions/cucumber_rails_steps.rb"
+      Then I should not see "features/support/cucumber_rails_helper.rb"
       
     Scenario: Running spork with a rails app and no server
       When I run cucumber --drb features
-      Then the error output should contain
+      Then the stderr should contain
         """
         WARNING: No DRb server is running. Running features locally
         """
@@ -107,12 +107,12 @@ Feature: Cucumber integration with rails
       When I fire up a spork instance with "spork cucumber"
       And I run cucumber --drb features
       Then the error output should be empty
-      And the output should contain "It worked!"
+      And I should see "It worked!"
       And the file "log/features.log" should include "hey there"
       
     Scenario: Running spork with a rails app and a non-standard port
       When I fire up a spork instance with "spork cucumber -p 9000"
       And I run cucumber --drb --port 9000 features
       Then the error output should be empty
-      And the output should contain "It worked!"
+      And I should see "It worked!"
       And the file "log/features.log" should include "hey there"
